@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nutrition Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:#f5f3ef; color:#1a1410; min-height:100vh; padding:40px 20px 80px; }
+.container { max-width:650px; margin:0 auto; }
+
+h1 {
+  font-family:'Bebas Neue',sans-serif; font-size:52px;
+  text-align:center; margin-bottom:8px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00,#ffd700);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.subtitle { text-align:center; font-size:14px; color:#9a8878; margin-bottom:30px; }
+
+.card {
+  background:#fff; border-radius:20px; padding:28px;
+  box-shadow:0 2px 24px rgba(0,0,0,0.09); border:1px solid #eee8e0;
+  margin-bottom:16px; position:relative; overflow:hidden;
+}
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#ff4500,#ff8c00,#ffd700);
+}
+
+.section-label {
+  font-size:10px; font-weight:700; letter-spacing:0.18em;
+  text-transform:uppercase; color:#b0a090; margin-bottom:18px;
+  display:flex; align-items:center; gap:8px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:#f0ece8; }
+
+.row-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.field { display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+.field label { font-size:10px; font-weight:700; letter-spacing:0.13em; text-transform:uppercase; color:#b0a090; }
+
+input[type="number"], select {
+  width:100%; padding:11px 14px; background:#f7f4f0;
+  border:1.5px solid #e8e0d8; border-radius:10px;
+  color:#1a1410; font-size:14px; font-family:'DM Sans',sans-serif;
+  outline:none; transition:border-color 0.2s;
+  appearance:none; -webkit-appearance:none;
+}
+input:focus, select:focus { border-color:#ff8c00; box-shadow:0 0 0 3px rgba(255,140,0,0.1); }
+select {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b0a090' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 14px center; padding-right:36px;
+  background-color:#f7f4f0; cursor:pointer;
+}
+select option { background:#fff; color:#1a1410; }
+
+.divider { height:1px; background:#f0ece8; margin:18px 0; }
+
+.btn-primary {
+  width:100%; padding:15px; border:none; border-radius:12px; cursor:pointer;
+  font-size:13px; font-weight:700; font-family:'DM Sans',sans-serif;
+  letter-spacing:0.12em; text-transform:uppercase;
+  background:linear-gradient(130deg,#ff4500,#ff8c00,#ffd700);
+  color:#fff; box-shadow:0 4px 24px rgba(255,80,0,0.3);
+  transition:transform 0.15s, box-shadow 0.2s;
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 36px rgba(255,80,0,0.5); }
+
+/* RESULTS */
+.macro-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+.macro-card {
+  background:#f7f4f0; border-radius:14px; padding:18px; text-align:center;
+  border:1px solid #ede8e0; position:relative; overflow:hidden;
+}
+.macro-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+}
+.macro-card.protein::before { background:#3b82f6; }
+.macro-card.carbs::before   { background:#f59e0b; }
+.macro-card.fat::before     { background:#10b981; }
+
+.macro-label { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#b0a090; margin-bottom:8px; }
+.macro-value { font-family:'Bebas Neue',sans-serif; font-size:36px; color:#1a1410; }
+.macro-unit  { font-size:12px; color:#b0a090; margin-top:4px; }
+
+.macro-bar-wrap { margin-top:8px; }
+.macro-bar-track { width:100%; height:6px; background:#e8e0d8; border-radius:100px; overflow:hidden; }
+.macro-bar-fill  { height:100%; border-radius:100px; transition:width 1s ease; }
+.bar-protein { background:#3b82f6; }
+.bar-carbs   { background:#f59e0b; }
+.bar-fat     { background:#10b981; }
+
+.calorie-total {
+  background:#fff8f0; border:1px solid #ffe0b0; border-radius:14px;
+  padding:18px 22px; display:flex; justify-content:space-between; align-items:center;
+}
+.calorie-total .label { font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#b0a090; }
+.calorie-total .value { font-family:'Bebas Neue',sans-serif; font-size:40px; color:#ff8c00; }
+
+.result-fade { animation:fadeUp 0.5s ease both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+.back-wrap { text-align:center; margin-top:24px; }
+.back-btn {
+  padding:14px 36px; border:none; border-radius:12px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00); color:#fff;
+  font-size:15px; font-weight:700; font-family:'DM Sans',sans-serif;
+  cursor:pointer; text-decoration:none; display:inline-block;
+  box-shadow:0 4px 20px rgba(255,80,0,0.3); transition:transform 0.15s;
+}
+.back-btn:hover { transform:translateY(-2px); }
+
+@media(max-width:500px) { .macro-grid { grid-template-columns:1fr; } .row-2 { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🍽️ Nutrition</h1>
+  <p class="subtitle">Get your daily macro breakdown based on your goal</p>
+
+  <div class="card">
+    <div class="section-label">Your Details</div>
+    <form action="/nutrition" method="POST">
+      <div class="row-2">
+        <div class="field">
+          <label>Weight (kg)</label>
+          <input type="number" name="weight" placeholder="e.g. 70" required>
+        </div>
+        <div class="field">
+          <label>Daily Calories</label>
+          <input type="number" name="calories" placeholder="e.g. 2000" required>
+        </div>
+      </div>
+      <div class="field">
+        <label>Goal</label>
+        <select name="goal" required>
+          <option value="">Select your goal</option>
+          <option value="weight_loss">Weight Loss</option>
+          <option value="muscle_gain">Muscle Gain</option>
+          <option value="maintenance">Maintenance</option>
+        </select>
+      </div>
+      <div class="divider"></div>
+      <button type="submit" class="btn-primary">⚡ Calculate Macros</button>
+    </form>
+  </div>
+
+  {% if protein %}
+  <div class="result-fade">
+    <div class="card">
+      <div class="section-label">Your Macro Targets</div>
+      <div class="macro-grid">
+        <div class="macro-card protein">
+          <div class="macro-label">Protein</div>
+          <div class="macro-value">{{ protein }}</div>
+          <div class="macro-unit">grams / day</div>
+          <div class="macro-bar-wrap">
+            <div class="macro-bar-track"><div class="macro-bar-fill bar-protein" style="width:{{ protein_pct }}%;"></div></div>
+          </div>
+        </div>
+        <div class="macro-card carbs">
+          <div class="macro-label">Carbs</div>
+          <div class="macro-value">{{ carbs }}</div>
+          <div class="macro-unit">grams / day</div>
+          <div class="macro-bar-wrap">
+            <div class="macro-bar-track"><div class="macro-bar-fill bar-carbs" style="width:{{ carbs_pct }}%;"></div></div>
+          </div>
+        </div>
+        <div class="macro-card fat">
+          <div class="macro-label">Fat</div>
+          <div class="macro-value">{{ fat }}</div>
+          <div class="macro-unit">grams / day</div>
+          <div class="macro-bar-wrap">
+            <div class="macro-bar-track"><div class="macro-bar-fill bar-fat" style="width:{{ fat_pct }}%;"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="calorie-total">
+        <div class="label">Total Daily Calories</div>
+        <div class="value">{{ calories }} kcal</div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="back-wrap">
+    <a href="/" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+</div>
+</body>
+</html>

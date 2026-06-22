@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMI Info</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:#f5f3ef; color:#1a1410; min-height:100vh; padding:40px 20px 80px; }
+.container { max-width:650px; margin:0 auto; }
+
+h1 {
+  font-family:'Bebas Neue',sans-serif; font-size:52px;
+  text-align:center; margin-bottom:8px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00,#ffd700);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.subtitle { text-align:center; font-size:14px; color:#9a8878; margin-bottom:30px; }
+
+/* BMI SCALE BAR */
+.scale-card {
+  background:#fff; border-radius:20px; padding:28px;
+  box-shadow:0 2px 24px rgba(0,0,0,0.09); border:1px solid #eee8e0;
+  margin-bottom:16px; position:relative; overflow:hidden;
+}
+.scale-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#ff4500,#ff8c00,#ffd700);
+}
+.section-label {
+  font-size:10px; font-weight:700; letter-spacing:0.18em;
+  text-transform:uppercase; color:#b0a090; margin-bottom:18px;
+  display:flex; align-items:center; gap:8px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:#f0ece8; }
+
+.bmi-scale {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:10px;
+}
+.bmi-scale-item { border-radius:10px; padding:14px 10px; text-align:center; }
+.bmi-scale-item .range  { font-family:'Bebas Neue',sans-serif; font-size:20px; }
+.bmi-scale-item .name   { font-size:11px; font-weight:700; margin-top:4px; }
+.bmi-scale-item .desc   { font-size:10px; margin-top:4px; opacity:0.7; }
+.s-under  { background:#fff8e0; color:#c8960a; }
+.s-normal { background:#e8f8ee; color:#1a9a50; }
+.s-over   { background:#fff2e0; color:#e07010; }
+.s-obese  { background:#ffeae8; color:#d03020; }
+
+/* INFO CARDS */
+.info-card {
+  background:#fff; border-radius:20px; padding:24px 28px;
+  box-shadow:0 2px 24px rgba(0,0,0,0.09); border:1px solid #eee8e0;
+  margin-bottom:14px; position:relative; overflow:hidden;
+}
+.info-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+}
+.info-card.under::before  { background:#f59e0b; }
+.info-card.normal::before { background:#10b981; }
+.info-card.over::before   { background:#f97316; }
+.info-card.obese::before  { background:#ef4444; }
+
+.card-header { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+.card-icon { width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+.icon-yellow { background:#fff8e0; }
+.icon-green  { background:#e8f8ee; }
+.icon-orange { background:#fff2e0; }
+.icon-red    { background:#ffeae8; }
+
+.card-title { font-family:'Bebas Neue',sans-serif; font-size:24px; }
+.card-range { font-size:12px; color:#b0a090; margin-top:2px; }
+
+.detail-row { display:flex; gap:10px; margin-bottom:10px; }
+.detail-label { font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#b0a090; min-width:90px; padding-top:1px; }
+.detail-value { font-size:13px; color:#3a3028; line-height:1.6; }
+
+.back-wrap { text-align:center; margin-top:28px; }
+.back-btn {
+  padding:14px 36px; border:none; border-radius:12px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00); color:#fff;
+  font-size:15px; font-weight:700; font-family:'DM Sans',sans-serif;
+  cursor:pointer; text-decoration:none; display:inline-block;
+  box-shadow:0 4px 20px rgba(255,80,0,0.3); transition:transform 0.15s;
+}
+.back-btn:hover { transform:translateY(-2px); }
+
+@media(max-width:500px) { .bmi-scale { grid-template-columns:1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🧘 BMI Info</h1>
+  <p class="subtitle">Understanding your Body Mass Index</p>
+
+  <div class="scale-card">
+    <div class="section-label">BMI Scale</div>
+    <div class="bmi-scale">
+      <div class="bmi-scale-item s-under">
+        <div class="range">&lt; 18.5</div>
+        <div class="name">Underweight</div>
+        <div class="desc">Below normal</div>
+      </div>
+      <div class="bmi-scale-item s-normal">
+        <div class="range">18.5–24.9</div>
+        <div class="name">Normal</div>
+        <div class="desc">Healthy range</div>
+      </div>
+      <div class="bmi-scale-item s-over">
+        <div class="range">25–29.9</div>
+        <div class="name">Overweight</div>
+        <div class="desc">Above normal</div>
+      </div>
+      <div class="bmi-scale-item s-obese">
+        <div class="range">&gt; 30</div>
+        <div class="name">Obese</div>
+        <div class="desc">High risk</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card under">
+    <div class="card-header">
+      <div class="card-icon icon-yellow">⚠️</div>
+      <div>
+        <div class="card-title">Underweight — BMI below 18.5</div>
+        <div class="card-range">Less than 18.5</div>
+      </div>
+    </div>
+    <div class="detail-row"><div class="detail-label">Risks</div><div class="detail-value">Nutrient deficiencies, weak immune system, fatigue, bone loss, hormonal issues</div></div>
+    <div class="detail-row"><div class="detail-label">Diet</div><div class="detail-value">Increase calorie intake with nutrient-dense foods — nuts, dairy, eggs, lean meat, whole grains</div></div>
+    <div class="detail-row"><div class="detail-label">Exercise</div><div class="detail-value">Focus on strength training to build muscle mass. Avoid excessive cardio</div></div>
+    <div class="detail-row"><div class="detail-label">Goal</div><div class="detail-value">Gain 0.25–0.5 kg per week gradually through a calorie surplus</div></div>
+  </div>
+
+  <div class="info-card normal">
+    <div class="card-header">
+      <div class="card-icon icon-green">✅</div>
+      <div>
+        <div class="card-title">Normal Weight — BMI 18.5–24.9</div>
+        <div class="card-range">18.5 to 24.9</div>
+      </div>
+    </div>
+    <div class="detail-row"><div class="detail-label">Status</div><div class="detail-value">You are in the healthy range. Lower risk of chronic disease</div></div>
+    <div class="detail-row"><div class="detail-label">Diet</div><div class="detail-value">Maintain a balanced diet — fruits, vegetables, whole grains, lean protein, healthy fats</div></div>
+    <div class="detail-row"><div class="detail-label">Exercise</div><div class="detail-value">Mix of cardio and strength training 4–5 days/week to maintain fitness</div></div>
+    <div class="detail-row"><div class="detail-label">Goal</div><div class="detail-value">Stay consistent. Focus on quality nutrition and sleep</div></div>
+  </div>
+
+  <div class="info-card over">
+    <div class="card-header">
+      <div class="card-icon icon-orange">⚡</div>
+      <div>
+        <div class="card-title">Overweight — BMI 25–29.9</div>
+        <div class="card-range">25 to 29.9</div>
+      </div>
+    </div>
+    <div class="detail-row"><div class="detail-label">Risks</div><div class="detail-value">High blood pressure, type 2 diabetes risk, joint pain, sleep apnea</div></div>
+    <div class="detail-row"><div class="detail-label">Diet</div><div class="detail-value">Reduce processed foods, sugar, and saturated fats. Eat more fiber and vegetables</div></div>
+    <div class="detail-row"><div class="detail-label">Exercise</div><div class="detail-value">150+ minutes of cardio per week. Add strength training 2–3 days/week</div></div>
+    <div class="detail-row"><div class="detail-label">Goal</div><div class="detail-value">Aim to lose 0.5–1 kg per week through a moderate calorie deficit</div></div>
+  </div>
+
+  <div class="info-card obese">
+    <div class="card-header">
+      <div class="card-icon icon-red">🚨</div>
+      <div>
+        <div class="card-title">Obese — BMI 30 and above</div>
+        <div class="card-range">30 or higher</div>
+      </div>
+    </div>
+    <div class="detail-row"><div class="detail-label">Risks</div><div class="detail-value">Heart disease, stroke, diabetes, certain cancers, mobility issues</div></div>
+    <div class="detail-row"><div class="detail-label">Diet</div><div class="detail-value">Work with a nutritionist. Cut sugar, alcohol, ultra-processed food. Eat whole foods</div></div>
+    <div class="detail-row"><div class="detail-label">Exercise</div><div class="detail-value">Start with low-impact activity — walking, swimming, cycling. Build up gradually</div></div>
+    <div class="detail-row"><div class="detail-label">Goal</div><div class="detail-value">Even losing 5–10% of body weight significantly reduces health risks</div></div>
+  </div>
+
+  <div class="back-wrap">
+    <a href="/" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+</div>
+</body>
+</html>

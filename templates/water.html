@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Water Intake</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:#f5f3ef; color:#1a1410; min-height:100vh; padding:40px 20px 80px; }
+.container { max-width:600px; margin:0 auto; }
+
+h1 {
+  font-family:'Bebas Neue',sans-serif; font-size:52px;
+  text-align:center; margin-bottom:8px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00,#ffd700);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.subtitle { text-align:center; font-size:14px; color:#9a8878; margin-bottom:30px; }
+
+.card {
+  background:#fff; border-radius:20px; padding:28px;
+  box-shadow:0 2px 24px rgba(0,0,0,0.09); border:1px solid #eee8e0;
+  margin-bottom:16px; position:relative; overflow:hidden;
+}
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#3b82f6,#06b6d4);
+}
+.section-label {
+  font-size:10px; font-weight:700; letter-spacing:0.18em;
+  text-transform:uppercase; color:#b0a090; margin-bottom:18px;
+  display:flex; align-items:center; gap:8px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:#f0ece8; }
+
+.row-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.field { display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+.field label { font-size:10px; font-weight:700; letter-spacing:0.13em; text-transform:uppercase; color:#b0a090; }
+input[type="number"], select {
+  width:100%; padding:11px 14px; background:#f7f4f0;
+  border:1.5px solid #e8e0d8; border-radius:10px;
+  color:#1a1410; font-size:14px; font-family:'DM Sans',sans-serif;
+  outline:none; transition:border-color 0.2s;
+  appearance:none; -webkit-appearance:none;
+}
+input:focus, select:focus { border-color:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
+select {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b0a090' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 14px center; padding-right:36px; background-color:#f7f4f0; cursor:pointer;
+}
+select option { background:#fff; color:#1a1410; }
+.divider { height:1px; background:#f0ece8; margin:18px 0; }
+
+.btn-primary {
+  width:100%; padding:15px; border:none; border-radius:12px; cursor:pointer;
+  font-size:13px; font-weight:700; font-family:'DM Sans',sans-serif;
+  letter-spacing:0.12em; text-transform:uppercase;
+  background:linear-gradient(130deg,#3b82f6,#06b6d4);
+  color:#fff; box-shadow:0 4px 24px rgba(59,130,246,0.3);
+  transition:transform 0.15s, box-shadow 0.2s;
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 36px rgba(59,130,246,0.45); }
+
+/* RESULT */
+.result-fade { animation:fadeUp 0.5s ease both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+.water-result {
+  text-align:center; padding:10px 0 20px;
+}
+.water-amount {
+  font-family:'Bebas Neue',sans-serif; font-size:80px; line-height:1;
+  background:linear-gradient(130deg,#3b82f6,#06b6d4);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.water-unit { font-size:18px; color:#b0a090; margin-top:4px; }
+
+.glasses-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:20px 0; }
+.glass-item { text-align:center; }
+.glass-emoji { font-size:28px; }
+.glass-label { font-size:11px; color:#9a8878; margin-top:4px; }
+
+.tip-box {
+  background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px;
+  padding:14px 16px; font-size:13px; color:#1d4ed8; line-height:1.6;
+}
+.tip-box strong { color:#1e40af; }
+
+.back-wrap { text-align:center; margin-top:24px; }
+.back-btn {
+  padding:14px 36px; border:none; border-radius:12px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00); color:#fff;
+  font-size:15px; font-weight:700; font-family:'DM Sans',sans-serif;
+  cursor:pointer; text-decoration:none; display:inline-block;
+  box-shadow:0 4px 20px rgba(255,80,0,0.3); transition:transform 0.15s;
+}
+.back-btn:hover { transform:translateY(-2px); }
+
+@media(max-width:500px) { .row-2 { grid-template-columns:1fr; } .glasses-grid { grid-template-columns:repeat(4,1fr); } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>💧 Water Intake</h1>
+  <p class="subtitle">Find your daily water target</p>
+
+  <div class="card">
+    <div class="section-label">Your Details</div>
+    <form action="/water" method="POST">
+      <div class="row-2">
+        <div class="field">
+          <label>Weight (kg)</label>
+          <input type="number" name="weight" placeholder="e.g. 70" required>
+        </div>
+        <div class="field">
+          <label>Activity Level</label>
+          <select name="activity" required>
+            <option value="">Select</option>
+            <option value="sedentary">Sedentary</option>
+            <option value="light">Light</option>
+            <option value="moderate">Moderate</option>
+            <option value="active">Very Active</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Climate</label>
+        <select name="climate" required>
+          <option value="">Select your climate</option>
+          <option value="cool">Cool / Cold</option>
+          <option value="moderate">Moderate</option>
+          <option value="hot">Hot / Humid</option>
+        </select>
+      </div>
+      <div class="divider"></div>
+      <button type="submit" class="btn-primary">💧 Calculate Water Intake</button>
+    </form>
+  </div>
+
+  {% if water_liters %}
+  <div class="result-fade">
+    <div class="card">
+      <div class="section-label">Your Daily Target</div>
+      <div class="water-result">
+        <div class="water-amount">{{ water_liters }}</div>
+        <div class="water-unit">litres per day · {{ water_ml }} ml</div>
+      </div>
+      <div class="glasses-grid">
+        {% for i in range(glasses) %}
+        <div class="glass-item">
+          <div class="glass-emoji">🥛</div>
+          <div class="glass-label">250ml</div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="tip-box">
+        💡 <strong>Tips:</strong> Drink a glass first thing in the morning. Carry a bottle everywhere.
+        Drink before meals. Add lemon or mint to make it enjoyable.
+        In hot weather or after exercise, drink more.
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="back-wrap">
+    <a href="/" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weight History</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:#f5f3ef; color:#1a1410; min-height:100vh; padding:40px 20px 80px; }
+.container { max-width:700px; margin:0 auto; }
+
+h1 {
+  font-family:'Bebas Neue',sans-serif; font-size:52px;
+  text-align:center; margin-bottom:28px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00,#ffd700);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+
+/* STAT CARDS */
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px; }
+.stat-card {
+  background:#fff; border-radius:16px; padding:18px; text-align:center;
+  box-shadow:0 2px 16px rgba(0,0,0,0.08); border:1px solid #eee8e0;
+  position:relative; overflow:hidden;
+}
+.stat-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#ff4500,#ffd700);
+}
+.stat-label { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#b0a090; margin-bottom:8px; }
+.stat-value { font-family:'Bebas Neue',sans-serif; font-size:34px; color:#1a1410; }
+.stat-sub { font-size:12px; color:#b0a090; margin-top:4px; }
+
+/* TABLE CARD */
+.table-card {
+  background:#fff; border-radius:20px; padding:28px;
+  box-shadow:0 2px 24px rgba(0,0,0,0.09); border:1px solid #eee8e0;
+}
+.table-header {
+  display:flex; align-items:center; gap:10px;
+  font-size:10px; font-weight:700; letter-spacing:0.18em;
+  text-transform:uppercase; color:#b0a090; margin-bottom:18px;
+}
+.table-header::after { content:''; flex:1; height:1px; background:#f0ece8; }
+
+table { width:100%; border-collapse:collapse; }
+thead th {
+  text-align:left; font-size:10px; font-weight:700;
+  letter-spacing:0.12em; text-transform:uppercase;
+  color:#b0a090; padding:10px 14px; border-bottom:2px solid #f0ece8;
+}
+tbody tr { transition:background 0.15s; }
+tbody tr:hover { background:#fffbf7; }
+tbody td { padding:13px 14px; font-size:14px; color:#3a3028; border-bottom:1px solid #f5f2ee; }
+tbody tr:last-child td { border-bottom:none; }
+
+.badge {
+  display:inline-block; padding:3px 10px; border-radius:100px;
+  font-size:11px; font-weight:600;
+}
+.badge-up   { background:#fff0e8; color:#e06010; }
+.badge-down { background:#e8f8ee; color:#1a9a50; }
+.badge-same { background:#f5f5f5; color:#888; }
+
+/* BACK BUTTON */
+.back-wrap { text-align:center; margin-top:28px; }
+.back-btn {
+  padding:14px 36px; border:none; border-radius:12px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00);
+  color:#fff; font-size:15px; font-weight:700;
+  font-family:'DM Sans',sans-serif; cursor:pointer;
+  text-decoration:none; display:inline-block;
+  box-shadow:0 4px 20px rgba(255,80,0,0.3);
+  transition:transform 0.15s, box-shadow 0.2s;
+}
+.back-btn:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(255,80,0,0.45); }
+
+@media(max-width:500px) { .stats { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>📋 Weight History</h1>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Total Entries</div>
+      <div class="stat-value">{{ history|length }}</div>
+      <div class="stat-sub">recorded</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Lowest</div>
+      <div class="stat-value">{{ history|min }} kg</div>
+      <div class="stat-sub">all time</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Highest</div>
+      <div class="stat-value">{{ history|max }} kg</div>
+      <div class="stat-sub">all time</div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">All Entries</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Weight (kg)</th>
+          <th>Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for w in history %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td><strong>{{ w }} kg</strong></td>
+          <td>
+            {% if loop.index == 1 %}
+              <span class="badge badge-same">—</span>
+            {% elif w > history[loop.index0 - 1] %}
+              <span class="badge badge-up">▲ {{ (w - history[loop.index0 - 1])|round(1) }} kg</span>
+            {% elif w < history[loop.index0 - 1] %}
+              <span class="badge badge-down">▼ {{ (history[loop.index0 - 1] - w)|round(1) }} kg</span>
+            {% else %}
+              <span class="badge badge-same">— same</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="back-wrap">
+    <a href="/" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workout Tips</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:#f5f3ef; color:#1a1410; min-height:100vh; padding:40px 20px 80px; }
+.container { max-width:700px; margin:0 auto; }
+
+h1 {
+  font-family:'Bebas Neue',sans-serif; font-size:52px;
+  text-align:center; margin-bottom:8px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00,#ffd700);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.subtitle { text-align:center; font-size:14px; color:#9a8878; margin-bottom:30px; }
+
+/* PLAN CARDS */
+.plan-card {
+  background:#fff; border-radius:20px; padding:28px;
+  box-shadow:0 2px 24px rgba(0,0,0,0.09); border:1px solid #eee8e0;
+  margin-bottom:16px; position:relative; overflow:hidden;
+}
+.plan-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#ff4500,#ff8c00,#ffd700);
+}
+
+.plan-header {
+  display:flex; align-items:center; gap:14px; margin-bottom:20px;
+}
+.plan-icon {
+  width:48px; height:48px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;
+}
+.icon-red    { background:#fff0e8; }
+.icon-blue   { background:#e8f0ff; }
+.icon-green  { background:#e8f8ee; }
+
+.plan-title { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:0.04em; color:#1a1410; }
+.plan-sub   { font-size:12px; color:#b0a090; margin-top:2px; }
+
+.section-label {
+  font-size:10px; font-weight:700; letter-spacing:0.16em;
+  text-transform:uppercase; color:#b0a090; margin-bottom:12px;
+  display:flex; align-items:center; gap:8px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:#f0ece8; }
+
+.day-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+.day-card {
+  background:#f7f4f0; border-radius:12px; padding:14px;
+  border:1px solid #ede8e0;
+}
+.day-name { font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#ff8c00; margin-bottom:8px; }
+.day-exercises { font-size:13px; color:#3a3028; line-height:1.7; }
+
+.tip-box {
+  background:#fffbf5; border:1px solid #ffe0b0; border-radius:12px;
+  padding:14px 16px; font-size:13px; color:#7a5020; line-height:1.6;
+}
+.tip-box strong { color:#ff8c00; }
+
+/* BACK */
+.back-wrap { text-align:center; margin-top:28px; }
+.back-btn {
+  padding:14px 36px; border:none; border-radius:12px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00);
+  color:#fff; font-size:15px; font-weight:700;
+  font-family:'DM Sans',sans-serif; cursor:pointer;
+  text-decoration:none; display:inline-block;
+  box-shadow:0 4px 20px rgba(255,80,0,0.3);
+  transition:transform 0.15s, box-shadow 0.2s;
+}
+.back-btn:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(255,80,0,0.45); }
+
+@media(max-width:500px) { .day-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>💪 Workout Tips</h1>
+  <p class="subtitle">Choose your goal and follow the weekly plan</p>
+
+  <!-- WEIGHT LOSS -->
+  <div class="plan-card">
+    <div class="plan-header">
+      <div class="plan-icon icon-red">🔥</div>
+      <div>
+        <div class="plan-title">Weight Loss Plan</div>
+        <div class="plan-sub">5 days/week · Cardio + Full Body</div>
+      </div>
+    </div>
+
+    <div class="section-label">Weekly Schedule</div>
+    <div class="day-grid">
+      <div class="day-card">
+        <div class="day-name">Monday</div>
+        <div class="day-exercises">30 min brisk walk<br>20 min cycling<br>Core workout</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Tuesday</div>
+        <div class="day-exercises">HIIT — 20 min<br>Bodyweight squats<br>Jump rope</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Wednesday</div>
+        <div class="day-exercises">Rest / Light yoga<br>Stretching 20 min</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Thursday</div>
+        <div class="day-exercises">Running 30 min<br>Lunges + Planks<br>Burpees</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Friday</div>
+        <div class="day-exercises">Full body circuit<br>Mountain climbers<br>Jumping jacks</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Weekend</div>
+        <div class="day-exercises">Active rest<br>Walk or swim<br>Light stretching</div>
+      </div>
+    </div>
+    <div class="tip-box">💡 <strong>Tip:</strong> Stay in a 300–500 calorie deficit daily. Drink 3L of water. Avoid sugary drinks and processed foods.</div>
+  </div>
+
+  <!-- MUSCLE GAIN -->
+  <div class="plan-card">
+    <div class="plan-header">
+      <div class="plan-icon icon-blue">💪</div>
+      <div>
+        <div class="plan-title">Muscle Gain Plan</div>
+        <div class="plan-sub">5 days/week · Push / Pull / Legs</div>
+      </div>
+    </div>
+
+    <div class="section-label">Weekly Schedule</div>
+    <div class="day-grid">
+      <div class="day-card">
+        <div class="day-name">Monday — Push</div>
+        <div class="day-exercises">Bench press<br>Shoulder press<br>Tricep dips</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Tuesday — Pull</div>
+        <div class="day-exercises">Pull-ups<br>Barbell rows<br>Bicep curls</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Wednesday — Legs</div>
+        <div class="day-exercises">Squats<br>Leg press<br>Calf raises</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Thursday — Push</div>
+        <div class="day-exercises">Incline press<br>Lateral raises<br>Skull crushers</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Friday — Pull</div>
+        <div class="day-exercises">Deadlifts<br>Seated rows<br>Hammer curls</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Weekend</div>
+        <div class="day-exercises">Full rest<br>Light walk only<br>Meal prep</div>
+      </div>
+    </div>
+    <div class="tip-box">💡 <strong>Tip:</strong> Eat 1.6–2g of protein per kg of bodyweight daily. Sleep 8 hours. Progressive overload every week.</div>
+  </div>
+
+  <!-- MAINTENANCE -->
+  <div class="plan-card">
+    <div class="plan-header">
+      <div class="plan-icon icon-green">⚖️</div>
+      <div>
+        <div class="plan-title">Maintenance Plan</div>
+        <div class="plan-sub">4 days/week · Mixed Training</div>
+      </div>
+    </div>
+
+    <div class="section-label">Weekly Schedule</div>
+    <div class="day-grid">
+      <div class="day-card">
+        <div class="day-name">Monday</div>
+        <div class="day-exercises">Strength training<br>Full body · 45 min</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Wednesday</div>
+        <div class="day-exercises">Cardio 30 min<br>Core + Flexibility</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Friday</div>
+        <div class="day-exercises">Strength training<br>Upper body focus</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Sunday</div>
+        <div class="day-exercises">Yoga or walk<br>Active recovery</div>
+      </div>
+    </div>
+    <div class="tip-box">💡 <strong>Tip:</strong> Match calories to your TDEE. Focus on consistency over intensity. Mix strength and cardio each week.</div>
+  </div>
+
+  <div class="back-wrap">
+    <a href="/" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+</div>
+</body>
+</html>

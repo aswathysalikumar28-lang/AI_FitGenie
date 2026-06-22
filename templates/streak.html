@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Streak & Motivation</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:#f5f3ef; color:#1a1410; min-height:100vh; padding:40px 20px 80px; }
+.container { max-width:620px; margin:0 auto; }
+
+h1 {
+  font-family:'Bebas Neue',sans-serif; font-size:52px;
+  text-align:center; margin-bottom:8px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00,#ffd700);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.subtitle { text-align:center; font-size:14px; color:#9a8878; margin-bottom:30px; }
+
+.card {
+  background:#fff; border-radius:20px; padding:28px;
+  box-shadow:0 2px 24px rgba(0,0,0,0.09); border:1px solid #eee8e0;
+  margin-bottom:16px; position:relative; overflow:hidden;
+}
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#ff4500,#ff8c00,#ffd700);
+}
+.section-label {
+  font-size:10px; font-weight:700; letter-spacing:0.18em;
+  text-transform:uppercase; color:#b0a090; margin-bottom:18px;
+  display:flex; align-items:center; gap:8px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:#f0ece8; }
+
+/* STREAK DISPLAY */
+.streak-hero { text-align:center; padding:10px 0 24px; }
+.streak-number {
+  font-family:'Bebas Neue',sans-serif; font-size:100px; line-height:1;
+  background:linear-gradient(130deg,#ff4500,#ffd700);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  filter:drop-shadow(0 4px 20px rgba(255,100,0,0.25));
+}
+.streak-label { font-size:16px; color:#9a8878; margin-top:4px; letter-spacing:0.05em; }
+.streak-emoji { font-size:48px; margin-bottom:8px; }
+
+/* STATS ROW */
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+.stat-box {
+  background:#f7f4f0; border-radius:14px; padding:16px; text-align:center;
+  border:1px solid #ede8e0;
+}
+.stat-box .label { font-size:10px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#b0a090; margin-bottom:8px; }
+.stat-box .value { font-family:'Bebas Neue',sans-serif; font-size:30px; color:#1a1410; }
+
+/* MOTIVATION */
+.motivation-card {
+  background:linear-gradient(135deg,#fff8f0,#fff3e0);
+  border:1px solid #ffe0b0; border-radius:16px; padding:22px;
+  text-align:center; margin-bottom:14px;
+}
+.motivation-quote { font-size:18px; font-weight:600; color:#7a4010; line-height:1.5; margin-bottom:8px; font-style:italic; }
+.motivation-author { font-size:12px; color:#b0a090; }
+
+/* BADGES */
+.badges-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.badge-item {
+  background:#f7f4f0; border-radius:14px; padding:16px 10px;
+  text-align:center; border:1px solid #ede8e0;
+  transition:transform 0.2s;
+}
+.badge-item:hover { transform:translateY(-2px); }
+.badge-item .badge-icon { font-size:32px; margin-bottom:8px; }
+.badge-item .badge-name { font-size:11px; font-weight:700; color:#3a3028; }
+.badge-item .badge-req  { font-size:10px; color:#b0a090; margin-top:3px; }
+.badge-item.earned { background:#fffbf0; border-color:#ffe0a0; }
+.badge-item.locked { opacity:0.4; }
+
+.back-wrap { text-align:center; margin-top:28px; }
+.back-btn {
+  padding:14px 36px; border:none; border-radius:12px;
+  background:linear-gradient(130deg,#ff4500,#ff8c00); color:#fff;
+  font-size:15px; font-weight:700; font-family:'DM Sans',sans-serif;
+  cursor:pointer; text-decoration:none; display:inline-block;
+  box-shadow:0 4px 20px rgba(255,80,0,0.3); transition:transform 0.15s;
+}
+.back-btn:hover { transform:translateY(-2px); }
+
+@media(max-width:500px) { .stats-row, .badges-grid { grid-template-columns:1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🏅 Streak</h1>
+  <p class="subtitle">Stay consistent. Every entry counts.</p>
+
+  <div class="card">
+    <div class="section-label">Your Current Streak</div>
+    <div class="streak-hero">
+      <div class="streak-emoji">🔥</div>
+      <div class="streak-number">{{ streak }}</div>
+      <div class="streak-label">day streak</div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="label">Total Entries</div>
+      <div class="value">{{ total }}</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">Best Streak</div>
+      <div class="value">{{ streak }}</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">This Week</div>
+      <div class="value">{{ week_entries }}</div>
+    </div>
+  </div>
+
+  <div class="motivation-card">
+    <div class="motivation-quote">"{{ quote }}"</div>
+    <div class="motivation-author">— Daily Motivation</div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Badges</div>
+    <div class="badges-grid">
+      <div class="badge-item {% if total >= 1 %}earned{% else %}locked{% endif %}">
+        <div class="badge-icon">🌱</div>
+        <div class="badge-name">First Step</div>
+        <div class="badge-req">1 entry</div>
+      </div>
+      <div class="badge-item {% if total >= 7 %}earned{% else %}locked{% endif %}">
+        <div class="badge-icon">⚡</div>
+        <div class="badge-name">One Week</div>
+        <div class="badge-req">7 entries</div>
+      </div>
+      <div class="badge-item {% if total >= 14 %}earned{% else %}locked{% endif %}">
+        <div class="badge-icon">🔥</div>
+        <div class="badge-name">On Fire</div>
+        <div class="badge-req">14 entries</div>
+      </div>
+      <div class="badge-item {% if total >= 21 %}earned{% else %}locked{% endif %}">
+        <div class="badge-icon">💪</div>
+        <div class="badge-name">Habit Built</div>
+        <div class="badge-req">21 entries</div>
+      </div>
+      <div class="badge-item {% if total >= 30 %}earned{% else %}locked{% endif %}">
+        <div class="badge-icon">🏆</div>
+        <div class="badge-name">30 Day Club</div>
+        <div class="badge-req">30 entries</div>
+      </div>
+      <div class="badge-item {% if total >= 100 %}earned{% else %}locked{% endif %}">
+        <div class="badge-icon">👑</div>
+        <div class="badge-name">Legend</div>
+        <div class="badge-req">100 entries</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="back-wrap">
+    <a href="/" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+</div>
+</body>
+</html>
