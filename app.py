@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request
 import joblib
 import os
-import pandas as pd
-import matplotlib.pyplot as plt
+import random
 
 app = Flask(__name__)
+
+# File path — works on both local and Render
+HISTORY_FILE = os.path.join(os.path.dirname(__file__), 'weight_history.csv')
 
 # Load ML model and encoder
 model = joblib.load("workout_model.pkl")
@@ -36,7 +38,7 @@ def predict():
     else:
         category = "Obese"
 
-    # Workout Prediction
+    # Workout Prediction (ML model)
     goal_encoded = goal_encoder.transform([goal])[0]
 
     workout = model.predict([
@@ -124,10 +126,10 @@ def save_weight():
 
     current_weight = request.form['current_weight']
 
-    with open('weight_history.csv', 'a') as file:
+    with open(HISTORY_FILE, 'a') as file:
         file.write(f"{current_weight}\n")
 
-    with open('weight_history.csv', 'r') as file:
+    with open(HISTORY_FILE, 'r') as file:
         total_entries = len(file.readlines())
 
     return render_template(
@@ -136,14 +138,16 @@ def save_weight():
         total_entries=total_entries
     )
 
+
 @app.route('/history')
 def history():
     try:
-        with open('weight_history.csv', 'r') as file:
+        with open(HISTORY_FILE, 'r') as file:
             history = [float(line.strip()) for line in file if line.strip()]
     except FileNotFoundError:
         history = []
     return render_template('history.html', history=history)
+
 
 @app.route('/nutrition', methods=['GET', 'POST'])
 def nutrition():
@@ -220,7 +224,6 @@ def water():
 
 @app.route('/streak')
 def streak():
-    import random
     quotes = [
         "Small steps every day lead to big results.",
         "Discipline is choosing between what you want now and what you want most.",
@@ -232,7 +235,7 @@ def streak():
     ]
 
     try:
-        with open('weight_history.csv', 'r') as f:
+        with open(HISTORY_FILE, 'r') as f:
             lines = [l.strip() for l in f if l.strip()]
         total = len(lines)
     except FileNotFoundError:
@@ -246,37 +249,22 @@ def streak():
         total=total,
         week_entries=week_entries,
         quote=random.choice(quotes)
-    )    
+    )
 
 
 @app.route('/workout-tips')
 def workout_tips():
-    return render_template('workout.html')    
+    return render_template('workout.html')
+
 
 @app.route('/graph')
 def graph():
-
-    data = pd.read_csv(
-        'weight_history.csv',
-        header=None,
-        names=['Weight']
-    )
-
-    plt.figure(figsize=(6,4))
-    plt.plot(data.index + 1, data['Weight'], marker='o')
-
-    plt.title('Weight Progress')
-    plt.xlabel('Entry Number')
-    plt.ylabel('Weight (kg)')
-
-    plt.grid(True)
-
-    plt.savefig('static/progress.png')
-    plt.close()
-
-    return render_template(
-        'graph.html'
-    )    
+    try:
+        with open(HISTORY_FILE, 'r') as f:
+            weights = [float(l.strip()) for l in f if l.strip()]
+    except FileNotFoundError:
+        weights = []
+    return render_template('graph.html', weights=weights)
 
 
 if __name__ == "__main__":
